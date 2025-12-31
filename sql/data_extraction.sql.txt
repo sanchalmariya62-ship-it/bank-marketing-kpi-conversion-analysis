@@ -1,0 +1,44 @@
+-- Create table for bank marketing data
+CREATE TABLE IF NOT EXISTS bank_marketing (
+    age INTEGER,
+    job TEXT,
+    marital TEXT,
+    education TEXT,
+    default_status TEXT,
+    balance INTEGER,
+    housing TEXT,
+    loan TEXT,
+    contact TEXT,
+    day INTEGER,
+    month TEXT,
+    duration INTEGER,
+    campaign INTEGER,
+    pdays INTEGER,
+    previous INTEGER,
+    poutcome TEXT,
+    y TEXT
+);
+
+-- Example KPI queries
+
+-- 1. Overall conversion rate
+SELECT 
+    COUNT(*) AS total_contacts,
+    SUM(CASE WHEN y = 'yes' THEN 1 ELSE 0 END) AS conversions,
+    ROUND(
+        100.0 * SUM(CASE WHEN y = 'yes' THEN 1 ELSE 0 END) / COUNT(*),
+        2
+    ) AS conversion_rate_percent
+FROM bank_marketing;
+
+-- 2. Conversion rate by contact channel
+SELECT 
+    contact,
+    COUNT(*) AS total_calls,
+    SUM(CASE WHEN y = 'yes' THEN 1 ELSE 0 END) AS conversions,
+    ROUND(
+        100.0 * SUM(CASE WHEN y = 'yes' THEN 1 ELSE 0 END) / COUNT(*),
+        2
+    ) AS conversion_rate_percent
+FROM bank_marketing
+GROUP BY contact;
